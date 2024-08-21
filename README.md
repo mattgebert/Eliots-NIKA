@@ -1,3 +1,9 @@
+This is a working fork of ELIOT's NIKA that works with Igor Pro 8.0.4.2 
+
+To compare which files I've changed have a look at [this comparison](https://github.com/EliotGann/Eliots-NIKA/compare/master...mattgebert:Eliots-NIKA:master). 
+
+-----------------------------------------------------------
+
 # Eliot's-NIKA
 Branch of NIKA which adds custom functionality for RSoXS and GIWAXS based in Igor Pro
 
