@@ -142,10 +142,6 @@ EndMacro
 function CCDGraph([minqy,maxqy,minqz,maxqz,colors,minval, maxval,name])
 	variable minval, maxval,minqy,maxqy,minqz,maxqz
 	string name,colors
-	minqz = paramisdefault(minqz) ? -0.05 : minqz
-	maxqz = paramisdefault(maxqz) ? 1.95 : maxqz
-	minval = paramisdefault(minval) ? 2000 : minval
-	maxval = paramisdefault(maxval) ? 200000 : maxval
 	if(paramisdefault(name))
 		svar username = root:Packages:Convert2Dto1D:OutputDataName
 		name = username
@@ -169,13 +165,6 @@ function CCDGraph([minqy,maxqy,minqz,maxqz,colors,minval, maxval,name])
 	endif
 	wave datao = CCDImageToConvert
 	
-	if(dimoffset(datao,0)<-1.2)
-		minqy = paramisdefault(minqy) ? 0.15 : minqy
-		maxqy = paramisdefault(maxqy) ? -1.95 : maxqy
-	else
-		minqy = paramisdefault(minqy) ? -0.15 : minqy
-		maxqy = paramisdefault(maxqy) ? 1.95 : maxqy
-	endif
 	string dataname = (name+"_2D")
 	duplicate/o datao $dataname
 	wave data = $dataname
@@ -194,27 +183,49 @@ function CCDGraph([minqy,maxqy,minqz,maxqz,colors,minval, maxval,name])
 	endfor
 	setdimlabel 1,1,'Tick Type',GIWAXSTIXnames
 	
-	AppendImage data
-	ModifyImage $dataname ctab= {minval,maxval,$colors,0}
-	ModifyImage $dataname maxRGB=(0,0,52224)
-	ModifyImage $dataname log= 1
-	ModifyGraph margin(left)=50,margin(bottom)=45,margin(top)=4,margin(right)=4,gfSize=10
-	ModifyGraph height={Plan,1,left,bottom}
-	ModifyGraph tick=2
-	ModifyGraph mirror=0
-	ModifyGraph fSize=0,gfsize=18
-	ModifyGraph lblMargin(left)=2
-	ModifyGraph standoff=0
-	ModifyGraph axOffset(bottom)=10
-	ModifyGraph axThick=1
-	ModifyGraph axRGB=(65535,65535,65535)
-	ModifyGraph lblLatPos(left)=0
-	ModifyGraph btLen=3,stLen=2,stThick=1.5,btThick=3
-	ModifyGraph tlOffset(bottom)=-2,tlOffset(left)=0,userticks={GIWAXSTIX,GIWAXSTIXnames}
-	Label left "Momentum Transfer Q\\Bz\\M [nm\\S-1\\M]"
-	Label bottom "Momentum Transfer Q\\Bxy\\M [nm\\S-1\\M]"
-	SetAxis/R left minqz,maxqz
-	SetAxis bottom minqy,maxqy
+	// Edit by Matt G 2024-Aug-21
+	// Use the wave data to determine a min/max value for the color scale
+	variable waveminval, wavemaxval
+	waveminval = Wavemin(data) + 0.1 // Small offset to avoid 0 values
+	wavemaxval = Wavemax(data)
+	minval = paramisdefault(minval) ? waveminval : minval
+	maxval = paramisdefault(maxval) ? wavemaxval : maxval
+	// Calculate the regular qz, qy
+	minqz = paramisdefault(minqz) ? -0.05 : minqz
+	maxqz = paramisdefault(maxqz) ? 1.95 : maxqz
+	if(dimoffset(datao,0)<-1.2)
+		minqy = paramisdefault(minqy) ? 0.15 : minqy
+		maxqy = paramisdefault(maxqy) ? -1.95 : maxqy
+	else
+		minqy = paramisdefault(minqy) ? -0.15 : minqy
+		maxqy = paramisdefault(maxqy) ? 1.95 : maxqy
+	endif
+
+	// Edit by Matt G 2024-Aug-21
+	// Modify works on the graph above, but a revecent include "EGN_ADE-ALS11012"
+	// a new window to open inbetween. Better to specify the same window name.
+
+	AppendImage /W=$gname data
+	ModifyImage /W=$gname $dataname ctab= {minval,maxval,$colors,0}
+	ModifyImage /W=$gname $dataname maxRGB=(0,0,52224)
+	ModifyImage /W=$gname $dataname log= 1
+	ModifyGraph /W=$gname margin(left)=50,margin(bottom)=45,margin(top)=4,margin(right)=4,gfSize=10
+	ModifyGraph /W=$gname height={Plan,1,left,bottom}
+	ModifyGraph /W=$gname tick=2
+	ModifyGraph /W=$gname mirror=0
+	ModifyGraph /W=$gname fSize=0,gfsize=18
+	ModifyGraph /W=$gname lblMargin(left)=2
+	ModifyGraph /W=$gname standoff=0
+	ModifyGraph /W=$gname axOffset(bottom)=10
+	ModifyGraph /W=$gname axThick=1
+	ModifyGraph /W=$gname axRGB=(65535,65535,65535)
+	ModifyGraph /W=$gname lblLatPos(left)=0
+	ModifyGraph /W=$gname btLen=3,stLen=2,stThick=1.5,btThick=3
+	ModifyGraph /W=$gname tlOffset(bottom)=-2,tlOffset(left)=0,userticks={GIWAXSTIX,GIWAXSTIXnames}
+	Label /W=$gname left "Momentum Transfer Q\\Bz\\M [nm\\S-1\\M]"
+	Label /W=$gname bottom "Momentum Transfer Q\\Bxy\\M [nm\\S-1\\M]"
+	SetAxis/R /W=$gname left minqz,maxqz
+	SetAxis /W=$gname bottom minqy,maxqy
 //	TextBox/C/N=text0/F=0/B=1/A=MB/X=0.00/Y=0.00/E "Momentum Transfer Q\\Bxy\\M [Å\\S-1\\M]"
 //	TextBox/C/N=text1/O=90/F=0/B=1/A=RC/X=0.00/Y=0.00/E "Momentum Transfer Q\\Bz\\M [Å\\S-1\\M]"
 //	TextBox /C/MC /F=2/N=test2 name
