@@ -2865,8 +2865,11 @@ function ADE_UpdatePlot()
 	NVAR /z SectorsUseCorrData=root:Packages:Convert2Dto1D:SectorsUseCorrData
 
 	SectorsUseRAWData = 1
-	SectorsUseCorrData = 0				
-	EGN_MakeSectorGraph()
+	SectorsUseCorrData = 0	
+	// Edit - Matt G 21-Aug-2024			
+	// Remove call, to avoid creation of new graph everytime there's
+	// an update, which also changes the most recent graph.
+	// EGN_MakeSectorGraph()
 	
 end
 
