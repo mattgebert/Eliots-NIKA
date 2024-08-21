@@ -2,6 +2,9 @@ This is a working fork of ELIOT's NIKA that works with Igor Pro 8.0.4.2
 
 To compare which files I've changed have a look at [this comparison](https://github.com/EliotGann/Eliots-NIKA/compare/master...mattgebert:Eliots-NIKA:master). 
 
+Note: I've run into troubles, because files like CCDPlotting.ipf use symbols such as Å which change character codes in different encodings. 
+To view these files in an editor like VSCode, you should use `Windows1252` encoding, instead of `UFT-8`.
+
 -----------------------------------------------------------
 
 # Eliot's-NIKA
