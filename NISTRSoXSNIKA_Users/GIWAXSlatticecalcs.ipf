@@ -119,25 +119,28 @@ function setuplatticeclicking()
 	string foldersave = getdatafolder(1)
 	setdatafolder root:Packages:GIWAXSLatticeCalcs
 	//ccdplotsquare()
+	// Edit - Matt G 2024-Aug-21
+	// Use gname to apply modifications to the graph window.
+	string gname = Cleanupname("GIWAXS_Lattice" + "_Graph", 0)
 	ccdgraph(name="GIWAXS_Lattice")
 	movewindow /w=GIWAXS_Lattice_Graph  864.75, 161.75,1326,623.75
 	setwindow GIWAXS_Lattice_Graph, hook(mouseuphook) = MouseclickerWindowHook
 	wave qxys_exp, qzs_exp, qz, qxy
 	wave /t hkl, hkl_obs
-	AppendToGraph qzs_exp vs qxys_exp
-	AppendToGraph qz vs qxy
-	ModifyGraph mode=3,marker=8,mrkThick=2
-	ModifyGraph rgb(qzs_exp)=(0,65280,0),rgb(qz)=(0,0,65280)
-	ModifyGraph mrkThick(qzs_exp)=2
-	ModifyGraph textMarker(qzs_exp)={root:Packages:GIWAXSLatticeCalcs:hkl_obs,"default",0,0,5,0.00,0.00}
-	ModifyImage ''#0 minRGB=(26112,26112,26112),maxRGB=(65535,65535,65535)
-	ModifyGraph textMarker(qzs_exp)={hkl_obs,"Arial Black",0,0,4,0.00,0.00}
-	ModifyGraph textMarker(qzs_exp)={hkl_obs,"Arial Black",0,0,4,0.00,0.00}
-	ModifyGraph hideTrace(qz)=1
-	ModifyGraph msize(qz)=3,mrkThick(qz)=1
-	ModifyGraph marker=8
-	ModifyGraph rgb(qzs_exp)=(0,0,0)
-	ModifyImage ''#0 ctab= {200,200000,Spectrum,0}
+	AppendToGraph /W=$gname qzs_exp vs qxys_exp
+	AppendToGraph /W=$gname qz vs qxy
+	ModifyGraph /W=$gname mode=3,marker=8,mrkThick=2
+	ModifyGraph /W=$gname rgb(qzs_exp)=(0,65280,0),rgb(qz)=(0,0,65280)
+	ModifyGraph /W=$gname mrkThick(qzs_exp)=2
+	ModifyGraph /W=$gname textMarker(qzs_exp)={root:Packages:GIWAXSLatticeCalcs:hkl_obs,"default",0,0,5,0.00,0.00}
+	ModifyImage /W=$gname ''#0 minRGB=(26112,26112,26112),maxRGB=(65535,65535,65535)
+	ModifyGraph /W=$gname textMarker(qzs_exp)={hkl_obs,"Arial Black",0,0,4,0.00,0.00}
+	ModifyGraph /W=$gname textMarker(qzs_exp)={hkl_obs,"Arial Black",0,0,4,0.00,0.00}
+	ModifyGraph /W=$gname hideTrace(qz)=1
+	ModifyGraph /W=$gname msize(qz)=3,mrkThick(qz)=1
+	ModifyGraph /W=$gname marker=8
+	ModifyGraph /W=$gname rgb(qzs_exp)=(0,0,0)
+	// ModifyImage /W=$gname ''#0 ctab= {200,200000,Spectrum,0} //Use default min/max range
 	setdatafolder foldersave
 end
 
