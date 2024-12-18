@@ -6,6 +6,36 @@ Note: I've run into troubles, because files like CCDPlotting.ipf use symbols suc
 To view these files in an editor like VSCode, you should use `Windows1252` encoding, instead of `UFT-8`.
 
 -----------------------------------------------------------
+### Matt's Simplified Instructions for Installation
+
+I've included the XMLutils into this repository, so you don't need to download it yourself.
+
+1. Clone this repository to a local directory (i.e. use [git](https://git-scm.com/) via cmd, or [github desktop](https://github.com/apps/desktop) GUI)
+
+        git clone https://github.com/mattgebert/
+
+2. Open Igor Pro 8.04 64-bit
+3. Open the menu options:
+    
+    `Help` > `Show Igor Pro User Files`
+
+4. Create shortcuts from the `Igor User Files` folders to the cloned local directory subfolders.
+
+        User Procedures
+        |- Shorcut1 ->  NISTRSoXSNIKA_Users
+        
+        Igor Procedures
+        |- Shorcut2 -> NISTRSoXSNIKA_Igor
+
+        Igor Extensions (64-bit)
+        |- Shorcut3 -> XMLutils
+
+5. Restart Igor Pro 64-bit.
+6. If you want to update in the future, you can either pull/fetch changes using git via cmd inside the directory, or via github desktop GUI.
+
+        git pull
+
+-----------------------------------------------------------
 
 # Eliot's-NIKA
 Branch of NIKA which adds custom functionality for RSoXS and GIWAXS based in Igor Pro
